@@ -1,0 +1,226 @@
+Accelerated C++ Errata
+
+Last modified 23 September 2004.
+Every book has bugs in it, and Accelerated C++ is no exception. This page notes the bugs that have come to our attention, and the printings in which they were discovered. All of these errors are corrected in the printing after the one in which they were found, except that errors noted in the fifth printing were not corrected until the ninth printing, which went to press in August, 2004.
+
+Please note that because of corrections, page numbers may somteimes differ slightly from one printing to another. So, for example, if you have a copy of the first printing, and you are looking for a correction first noticed in the fourth printing, you may find it on the page before or after the one cited.
+
+Thanks to Walter E. Brown, Don Caldwell, Paolo Carlini, Neil Cerutti, Harry Chung, David Clark, Anton Doblmaier, Debatosh Debnath, Steven van Dijk, Hans Dulimarta, Daniel Faber, Attila Feher, Adam Foster, Kevin Goodsell, Seyed H. Haeri, Gregory Haley, Mogens Hansen, Philip Hibbs, Anto Jurkovic, John Linderman, Greg McClure, Miguel Mart¨ªnez de la Torre, Bernd Mohr, Wo-Yip Ng, Nicole McAllister, Brian McNamara, Frank Mittelbach, Ron Natalie, John Potter, Peter N. Roth, Andreas Scherer, William Simon, Marc Souaille, Randy Sherman, Ralf Taner, Antoine Trux, Alex Tuzlukov, Abraham Walfish, Conrad Weisert, and Han Xu for pointing them out!
+
+Technical errors in the fifth printing
+
+Pages 32 and 307: The precedence table should say that the assignment and conditional operators have the same precedence and are right-associative.
+Page 173: In the second line from the end of the page, *beg should be *begin (twice).
+Page 179: The text should say that it is possible for argcto be zero.
+Pages 191-192, 314: The types that containers are required to provide include difference_type
+Page 223: In the fourth line of the first complete paragraph, iostream should be istream.
+Page 224: In the fifth line after the second program example, string should be Str.
+Page 304: The text incorrectly states that float is promoted to double as part of the standard arithmetic conversions.
+Clarifications in the fifth printing
+
+Page 24: The discussion at the bottom of the page should say explicitly that treating a bool value as a number yields 1 if the bool is true and0 if the bool is false.
+Page 216: In the code example at the bottom of the page, the call to s.data.push_back is not the only compile error, because it is not the only reference to s.data; there is another reference near the beginning of the example.
+Typographical details in the fifth printing
+
+Page 57: In the fourth paragraph, the first sentence should end with ``end-of-file'' instead of ``end-of file.''
+Page 111: In the last full paragraph, the variable named didn't should be didnt.
+Page 128: Near the bottom of the page, the sentence that refers to ``the data structure that split returns'' should instead be referring to xref.
+Page 154: There is a comma missing in the argument list of the call to copy in the last line of exercise 8-6.
+Page 219: The constructor of class Str should have parameters named b and e, rather than i and j, to match the version on page 212.
+Technical errors in the fourth printing
+
+Page 34: In exercise 2-10, the comparison k != n should be k != 10.
+Page 70: The invariant near the bottom of the page should refer to maxlen rather than max.
+Page 174: In the third line from the bottom, coord + 1 should be coords + 1.
+Page 183: In the comment in the code example near the bottom of the page, p should be *p.
+Page 190: In the last code example on the page, size_type should be std::size_t. Note that the similar example on page 193 is correct as it stands, because size_type has now been defined.
+Page 239: The call to students[i].grade() is dynamically bound, not statically bound. However, because the type of students[i] is known during compilation, the effect is the same as that of static binding.
+Page 264: The first code example should call s1.read(cin) rather than read(cin, s1), and similarly for s2.
+Pages 265-266: The text sometimes mentions the standard vector class when it should refer to the Vec class that we are defining.
+Page 280: The last code example has a spurious semicolon at the end.
+Page 281: The first complete paragraph should note that Pic must also be a friend.
+Page 304: The list of conversions is missing an entry, just before the last one. It should say: ``Otherwise, if either operand is unsigned int, the result is unsigned int.'' It also needs to mention the integral promotions.
+Page 307: The description of compound assignment should say x op= y instead of x op= x
+Typographical details in the fourth printing
+
+The code examples are not consistent about whether to put a space after template; that is, whether to say
+template<class T> class Vec { /* ... */ };
+or
+template <class T> class Vec { /* ... */ };
+Fortunately, it's correct either way.
+Clarifications in the fourth printing
+
+Pages 32 and 307: The description of compound assignments in the table should enumerate the operators explicitly. The description of % should say that the operands must be integers.
+Page 100: In exercise 5-9, it's not clear whether a word containing mixed-case letters is uppercase or lowercase. The exercise should be to write all the words in the input that do not contain any uppercase letters, followed by all the words that contain one or more uppercase letters.
+Page 179: The program at the bottom of the page can be made easier to understand by writing argv[1] as a special case, and then printing a space before each subsequent argument, if any.
+Pages 260 and 263: The initializations of p and refptr are clearer if they appear in the same order as the definitions of the data members themselves.
+Technical errors in the third printing
+
+Page 47: The invariant in the comment on the third line of the page should say that homework contains all the homework grades read so far, rather than all the grades. Similarly for the invariant in the comment near the bottom of page 70.
+Page 100: In exercise 5-6, v should be students throughout.
+Page 136: In the first complete paragraph on the page, the third sentence should refer to ``the body'' rather than ``the push_back.''
+Pages 167, 238, 241, 248, and 258: students.name.size() should be students.name().size() instead.
+Page 186: <ifstream> should be <fstream>
+Page 191: Containers need to define reference and const_reference as well as value_type.
+Page 203: In the last paragraph before the code example, size and end need to know about the new member as well.
+Page 206: The comments in the code example should reflect that the definitions of size and end are changed.
+Page 209: The last sentence of the second paragraph swaps the descriptions of limit and avail.
+Page 213: On the third line of the first code example, the comment should refer to d2 instead of d.
+Page 222: The declaration of operator double in the first code example should have a const immediately before the semicolon.
+Pages 258 and 259: In the example that spans those pages, runtime_error should be std::runtime_error.
+Pages 261 and 263: The definition of refptr should mention std::size_t rather than size_t.
+Page 264: In the last example before the start of section 14.4, run_time_error should be runtime_error.
+Pages 271, 273, and 276: Class Pic_base should have an empty virtual destructor.
+Page 277: In the sentence before the last code example, vector<char> should be vector<string>.
+Page 281: The second code example should refer to std::max rather than just max.
+Clarifications in the third printing
+
+Page 28: It should be explicit that we are talking about the values that r takes on in the loop bodies, not what value it might have after the loop completes.
+Page 73: Exercise 4-6 should ask the reader to rewrite the read and grade functions as well as the Student_info structure.
+Page 154: The xref function doesn't return a vector<string>, so exercise 8-5 should describe the current behavior as ``placing their entire output in a data structure.''
+Page 165: The discussion at the bottom of the page should say explicitly that initialization takes place in the order of declaration, not in the order of the member-initializer list.
+Page 184: The discussion of off-the-end pointers in the third paragraph of 10.6.2 should refer to the earlier discussion on page 149.
+Page 190: The comments in the first example should make it clear that the definitions use the cited constructors, rather than defining them.
+Page 191: In section 11.2.3, paragraph 2, the first sentence refers to ``the type of the objects that the container stores.'' It is clearer to refer to ``the type of each object that the container stores.''
+Page 258: In order to use the Handle class, it is necessary to change the Core class to allow Handle<core> to use the clone member, either by making Handle<core> a friend of Core or by making the clone member public.
+Page 306: The description of operators that guarantee order of evaluation should include the comma operator (correctly described at the bottom of the table on page 307).
+Typographical details in the third printing
+
+Page 128: In the penultimate comment in the code example, ``lines numbers'' should be ``line numbers.''
+Page 164: The last line of the fourth paragraph has an extra word ``a'' in it.
+Page 192: In the last line of the page, ``It the operator...'' should be ``If the operator...''
+Page 247: There should not be a space between ``friend'' and ``ship'' at the end of the first complete paragraph.
+Pages 292 and 294: The chapter title at the top of the page is missing a question mark.
+Page 296: In the paragraph beginning ``C++ inherits its'' near the middle of the page, there is a missing word ``by'' after ``followed'' in the third line.
+Page 297: The first line of the definition of type-specifier should end with an ``or'' (|) symbol.
+Page 303: The word ``is'' appears twice in a row in section A.2.3, paragraph 2, line 1.
+Technical errors in the second printing
+
+Page 22, first paragraph, last line: ``true'' should be ``false''
+Page 32, near the end of the table: x op= x should be x op= y.
+Page 33: The equivalence between for and while statements is not exact if the statement is or contains a continue statement.
+Page 34: In the description
+if (<condition>) statement; else statement2
+there should be no semicolon, because the statement will usually have one of its own.
+Page 48, just before 3.3: The execution time of sort is guaranteed in the average case, but it is possible for it to run more slowly with pathological input.
+Page 64: The 11th line from the bottom is missing some characters:
+<< string(maxlen + 1 - students[i].name.size(), '
+should be
+<< string(maxlen + 1 - students[i].name.size(), ' ');
+Page 70, 7 lines from the bottom: vs should be students in the comment on that line.
+Page 97: erase returns an iterator referring to the position immediately after the erasure. c[n] refers to a container element, not necessarily a character.
+Page 116, two paragraphs before the beginning of section 6.3: The first reference to v in that paragraph should refer to s.homework instead, as should the reference to v in the comment in the code example. The last two references to should refer to nonzero instead.
+Page 120: The last code example should call students.erase, not v.erase.
+Page 135: In the last line of the first paragraph of section 7.4.4, < should be <=.
+Page 190, last line on the page: vector should be Vec.
+Page 204, code example: The second parameter for construct should be const T&, not T.
+Page 205, the declarations of uninitialized_copy and uninitialized_fill should be
+template<class In, class Out> Out uninitialized_copy(In, In, Out); 
+template<class Out, class T> void uninitialized_fill(Out, Out, const T&);
+where In is an input-iterator type and Out is a forward-iterator type.
+Page 213, just after the last code example: The second sentence should say ``The first statement defines t...'' instead of referring to s.
+Page 257, two lines before the beginning of section 14.1.2: student.grade() should be (*student).grade().
+Page 283, last example: The width function should call std::max explicitly instead of plain max.
+Page 284, last example: The height function should call std::max explicitly instead of plain max.
+Page 330, the index entry for http://www.accu.org should refer to page 294 (where the URL accually appears) rather than page 293 (where the section begins that contains the URL).
+Page 307: Near the bottom of the table, x op= x should be x op= y
+Clarifications in the second printing
+
+Page 44 uses the term ``(one past)'' without explaining it. The idea is that if c is a container, c.end() does not refer to the last element, but rather to the imaginary location where the element after the last one would be if it existed.
+Page 76, last paragraph before section 5.1.1: The text should make it clear that assigning a new value to students overwrites the previous contents.
+Page 103, immediately after the first example: ``third argument is an iterator'' is clearer if replaced by ``third parameter is required to be an iterator''.
+Page 107, just after the last example: It is clearer to say that static local variables are ``constructed'' than that they are ``created,'' because the storage that the variable occupies is supposed to be allocated when the program begins execution.
+Page 135: The explanation of nrand could be clearer.
+Page 142: The second paragraph of section 8.1.2 could be clearer.
+Page 151: The description of ostream_iterator does not make it clear that the second argument must have type const char*. In particular, it cannot be a string or a character literal.
+Page 154: In exercise 8-2, equal(b, e, d) would be clearer as equal(b, e, b2).
+Page 195, just before the last code example: It should be clearer that we are referring to the copy constructor, as opposed to other constructors.
+Page 201, second paragraph of section 11.3.5: The second sentence should be clearer.
+Page 202, last line before the example: the word ``copy'' is ambiguous.
+Typographical details in the second printing
+
+In various places, container<T> should really appear as container<T> because there is no standard type named container; instead, container refers to the name of any standard-library container class.
+Page 11: The second-to-last paragraph in the section just before 1.2 should have ``Our'' instead of ``Out'' as its first word.
+Page 21: In the line just before the code example, ``what know'' should be ``what we know''.
+Page 45, second paragraph before the diagram, ``average of value'' in the last line of that paragraph should be ``average value''.
+Page 51: In the seventh line from the bottom, the word ``same'' appears twice in succession.
+Page 66: In the fourth line from the bottom, the word ``about'' appears twice in a row.
+Page 104: It is useful for the first paragraph to include a reference back to page 88.
+Page 139: In the penultimate line, ``constrains'' should be ``constrain.''
+Page 152: The penultimate comment in the first code example is in the wrong font.
+Page 250, three lines before the last code example: ``(publicly)'' should be ``(publicly)''.
+Technical errors in the first printing
+
+The calls to setw, such as the one near the bottom of page 64, do not work as advertised. The implementations that we used do not implement setw properly for strings, as we noted in exercise 4-9 (page 74), so we did not discover the problem during testing.
+The most straightforward solution is to replace
+
+cout << setw(maxlen+1) << students[i].name;
+by
+cout << students[i].name << string(maxlen+1 - students[i].name.size(), ' ');
+thereby obviating exercise 4.9 entirely. Alternatively, one could write
+cout << setw(maxlen+1) << setiosflags(ios_base::left) << students[i].name << resetiosflags(ios_base::left);
+which would cause cout to left-justify (i.e. pad on the right) while writing students[i].name.
+Page 32: The definition of % in the table should say x - ((x / y) * y) instead of x - ((x - y) * y). Ditto for the table on page 307.
+Page 35: The using-directive for std::precision shouldn't be there.
+Page 36: The program might divide by zero if the student enters no grades. Discussing this eventuality in the main text would be a diversion, so we've added a new exercise.
+Page 46: The using-directive for std::precision shouldn't be there.
+Page 47: The line near the middle of the page reading
+: median = homework[mid];
+should be
+: homework[mid];
+Page 54: The phrase ``reference to const double'' near the bottom of the page should be ``reference to vector of const double.''
+Page 60: In the program example, the subexpression grade(students[i]) should be grade(midterm, final, homework).
+Page 73: The description of the width member function should say that the output is padded on the left, not on the right.
+Page 80: In the first code example on the page, vector<Student::info> should be vector<Student_info>.
+Page 95: The comments in the program on this page have "left-hand" and "right-hand" reversed.
+Page 97: The definition container<T> c(); should be container<T> c;
+Page 108: The test for i + sep.size() != e in the inner if is redundant, as is the test if (i != e) near the end of the program.
+Page 115: In the last line of section 6.2.3, median_grade should be grade_aux. The average_analysis function does not take into account the possibility that a student did no homework at all. We're going to leave that possibility as an exercise.
+Page 121: The description of accumulate is wrong. The function copies t, adds each element in the range [b, e) to the copy of t, and returns a copy of the modified copy of t as its result.
+Page 147: In the first paragraph in 8.2.4, it isn't really true that forward iterators prevent us from looking at an element again. What they do is to prevent us from moving an iterator to the immdiately preceding element.
+Page 150: In the first sentence of section 8.3, the phrase "separate categories from output iterators" should be "separate categories from forward iterators."
+Page 163: In the last paragraph, the claim that users don't need to know how Student_info is implemented isn't quite accurate: They don't need to know in order to write code that uses it, but they do need to know some of the details in order to be able to prepare input files for the program.
+Page 176: The month_lengths array should be defined as
+const int month_lengths[] = { /* ... */ };
+Page 178: The letters array should be defined as 
+static const char* const letters[] = { /* ... */ }; 
+because there is no intent ever to change its elements.
+Page 195: The call to split(words) in the last line of the first code example should be split(line).
+Page 199: The name blanks should be spaces.
+Page 200: The two references to words in the first complete paragraph (the second of which is in a code example) should refer to line.
+Page 220: In the last example on the page, the variables temp and s should be temp1 and greeting, respectively.
+Page 221: In the second paragraph of section 12.4, we should be talking about Vec, not vector. Moreover, in the hypothetical case, p would contain 42 empty rows, not 42 rows of single null characters.
+Page 249: Just before the last example, the phrase "version of final in Core" should be "version of regrade in Core."
+Page 250: Near the end of the third line, final should be regrade.
+Page 264: In the first example, the last comment should say "changes only s2 and not s1" instead of "changes only s1 and not s2." In the following example, the call make_unique(); should be cp.make_unique(); Page 281: in the last line before section 15.2.2, operator>> should be operator<<.
+Page 282: In the last example, the last two parameters should be named beg and end, respectively.
+Page 287: In the discussion near the bottom of the page, protected allows access to the base-class part of any object of the appropriate derived class, not just the base-class part of the current object. What it does not allow is access to members of freestanding base-class objects.
+Page 292: Just before the sample output, the text describes the grade histogram as containing asterisks, when it actually contains = symbols.
+Clarifications in the first printing
+
+Page 28: The description of the for statement should make it clear that the init-statement is required to be either a definition or an expression statement.
+Page 191: In the first complete paragraph, the two uses of size_t are easier to understand if they refer to size_type instead, to match the code. The two names refer to the same type, so the uses are technically correct, but it's easier to understand if they're changed.
+Page 193: The discussion of the size function at the bottom of the page makes it appear that the type of the difference between two pointers is more important than it really is. The real point is that although the value of limit - data has type ptrdiff_t, returning that value from size converts it to size's return type.
+Typographical details in the first printing
+
+If a page has any constant-width text in the heading at the top of the page (which can happen only for odd-numbered pages), the page number is very slightly smaller than it should be. The affected page numbers are 3, 85, 87, 89, 91, 93, 95, 103, 105, 107, 109, 163, 179, 189, 191, 193, 215, 217, 219, 233, and 235.
+Page xii: "langauge" should be "language" near the end of the third paragraph.
+Page 24: Shortly before 2.4.1.2, change "such the ones" to "such as the ones."
+Page 30: Change string::size_type to int in the two for statements at the bottom of the page.
+Page 34: The program in exercise 2-10 should have a return 0; statement at the end.
+Page 45: Near the bottom, change "it should easy" to "it should be easy."
+Page 72: The comments in the last example on the page have their beginning slashes in italic font rather than constant-width font.
+Page 158: The word "have" appears twice in a row in the first paragraph after the numbered list near the top of the page.
+Page 162: The word "the" appears twice in a row in the first complete paragraph on this page.
+Page 164: The word "be" appears twice in a row in paragraph 5, line 3.
+Page 167: In the second line of the paragraph beginning "Protection labels," "afccessible" should be "accessible."
+Page 178: In the second complete paragraph from the end of the page, "determine the its type" should be "determine its type."
+Page 199: Immediately before the example, "in of an expression" should be "in an expression." In the last complete paragraph, the word "the" appears twice in a row.
+Page 203: On the first line of the page, "such this one" should be "such as this one."
+Page 224: Near the middle of the page, "does not to prevent" should be "does not prevent."
+Page 253: Near the end of the second paragraph, "use the a single" should be "use a single."
+Page 260: In the first line of the first complete paragraph, "we would like be able" should be "we would like to be able."
+Page 262: In the second paragraph from the end, ``such Student_info'' should be ``such as Student_info.''
+Page 283: In the first complete paragraph, "an ordinary member functions" should be "an ordinary member function."
+Page 289: In the fourth line, "parameter, type" should be "parameter type."
+Page 307: The table extends beyond the nominal right margin.
