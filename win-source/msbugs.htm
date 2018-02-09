@@ -1,0 +1,412 @@
+<HTML>
+
+<HEAD>
+<TITLE>Known problems with the Microsoft Visual C++ compiler, version 6.0:</TITLE>
+</HEAD>
+
+<BODY BGCOLOR=#F0F0F0>
+
+<H1>Known problems with the Microsoft Visual C++ compiler, version 6.0:</H1>
+
+The Microsoft Visual C++ compiler, version 6.0 (which we shall call VC++ 6.0)
+fails to match the C++
+standard in several ways that prevent some of the code in
+<CITE>Accelerated C++</CITE> from compiling properly.
+This page describes the problems and shows how to change the
+code to avoid the problems.
+
+<P>Some of these problems recur throughout the text. 
+For example, any problem that affects the student grading
+program will occur in Chapters 4, 6, 9, and 13, because that
+program occurs in all those chapters.  
+We describe these pervasive problems first,
+followed by a list of problems specific to each chapter.
+
+<P>We have reported these bugs to the Microsoft folks and they
+are working on fixes.  For example, in the first section below,
+which described persvasive problems, problem #2 has been fixed 
+in Service Pack 4.
+
+<P>In each case we offer a suggested workaround.
+These workarounds generally use the <TT>#ifdef</TT> 
+preprocessor directive. 
+That directive works similarly to the <TT>#ifndef</TT>
+directive that we described in &#167;4.3/67.
+The <TT>#ifdef</TT> directive asks the preprocessor to
+process text up to the corresponding <TT>#endif</TT> if the
+preprocessor symbol following <TT>#ifdef</TT> is defined.
+The Microsoft compiler defines the symbol
+<TT>_MSC_VER</TT>, which we test to conditionally include
+code special to the Microsoft compiler.
+
+<H1>Pervasive bugs:</H1>
+
+<OL>
+
+<LI>
+When you write a <TT>using</TT> declaration for a container type, such as <TT>vector</TT>:
+
+<UL><TT>
+<BR>using std::vector;
+</TT></UL><BR>
+
+you should then be able to use members of that container type, particularly
+type members, without further ado.
+For example:
+
+<UL><TT>
+<BR>vector&lt;double&gt;::size_type n = 0;
+</TT></UL><BR>
+
+Unfortunately, VC++ 6.0 complains with a message that says something like
+
+<UL><TT>
+<BR>
+vector&lt;double, class std::allocator&lt;double&gt; &gt; : is not a class or namespace name
+</TT></UL><BR>
+
+The easiest way to work around this problem is to include <TT>std::</TT> as an
+explicit qualifier, even though it should not be necessary:
+
+<UL><TT>
+<BR>using std::vector;
+<BR>
+<BR>#ifdef _MSC_VER
+<BR>std::vector&lt;double&gt;::size_type n = 0;
+<BR>#else
+<BR>vector&lt;double&gt;::size_type n = 0;
+<BR>#endif
+</TT></UL><BR>
+
+<LI>
+VC++ 6.0 prior to Service Pack 4 does not properly handle function
+arguments passed to template functions.  This bug affects the student
+grading program that appears in a number of places in
+<CITE>Accelerated C++</CITE>. The problem occurs when using
+<TT>compare</TT> as an argument to the standard-library <TT>sort</TT> function:
+
+<UL><TT>
+<BR>sort(vs.begin(), vs.end(), compare);
+</TT></UL><BR>
+
+<P>One workaround is to define the <TT>&lt;</TT> operator for
+<TT>Student_info</TT>, which <TT>sort</TT> can use automatically.
+First define the appropriate function:
+
+<UL><TT>
+<BR>#ifdef _MSC_VER
+<BR>bool operator&lt;(const Student_info&amp; x, const Student_info&amp; y)
+<BR>{
+<BR><UL>    return x.name() &lt; y.name();</UL>
+    }
+<BR>#endif
+</TT></UL><BR>
+
+Then replace the relevant calls as follows:
+
+<UL><TT>
+<BR>#ifdef _MSC_VER
+<BR><UL>sort(vs.begin(), vs.end());</UL>
+    #else
+<BR><UL>sort(vs.begin(), vs.end(), compare);</UL>
+    #endif
+</TT></UL><BR>
+
+A simpler workaround, but one that uses language features that do not
+appear until Chapter 10, is to place an explicit <TT>&amp;</TT> operator before
+<TT>compare</TT>:
+
+<UL><TT>
+<BR>#ifdef _MSC_VER
+<BR><UL>sort(vs.begin(), vs.end(), &compare);</UL>
+    #else
+<BR><UL>sort(vs.begin(), vs.end(), compare);</UL>
+    #endif
+</TT></UL><BR>
+
+We believe that this bug was fixed in Service Pack 4.
+<BR>
+
+<BR>
+<LI>
+The MS library fails to properly pad <TT>string</TT> output.  Thus calls, such as
+
+<UL><TT>
+<BR>cout &lt&lt setw(maxlen+1) &lt&lt students[i].name;
+</TT></UL><BR>
+
+should pad the output so that whatever value is in <TT>students[i].name</TT>
+is padded out to use at least <TT>maxlen+1</TT> characters.  
+Instead, the library provides no padding and so the names run into the next output.
+
+<P>
+When we wrote the book, we assumed that fixing this problem would make our
+programs correct.
+Unfortunately, because of our inability to test the code, we failed to realize
+that <TT>setw</TT> would pad on the <EM>left</EM> rather than on the right,
+which is not the behavior we wanted.
+
+<P>
+The easiest way to work around both of these problems is to write the required padding
+explicitly.  For example:
+
+<UL><TT>
+<BR>#ifdef _MSC_VER
+<BR><UL>cout &lt&lt students[i].name;
+<BR>cout &lt&lt string(maxlen - students[i].name.size() + 1, ' ');</UL>
+    #else
+<BR><UL>cout &lt&lt setw(maxlen+1) &lt&lt students[i].name;</UL>
+    #endif
+</TT></UL><BR>
+
+<P>
+We have adopted this approach in the second and subsequent printings of
+<CITE>Accelerated C++</CITE>.
+
+<BR><BR>
+
+<LI>
+The MS library does not define the <TT>min</TT> and <TT>max</TT>
+algorithms, which should be found in <TT>&lt;algorithm&gt;</TT> The
+workaround we use is to define a new header file, say
+<TT>minmax.h</TT>, which we include in any file that uses these
+functions:
+
+<UL><TT>
+<BR>#ifndef GUARD_minmax_H
+<BR>#define GUARD_minmax_H
+<BR>#ifdef _MSC_VER
+<BR>// needed to cope with bug in MS library:
+<BR>// it fails to define min/max
+<BR>
+<BR>template &lt;class T&gt; inline T max(const T&amp; a, const T&amp; b)
+<BR>{
+<BR><UL>return (a &gt; b) ? a : b;</UL>
+    }
+<BR>
+<BR>template &lt;class T&gt; inline T min(const T&amp; a, const T&amp; b)
+<BR>{
+<BR><UL>return (a &lt; b) ? a : b;</UL>
+    }
+<BR>
+<BR>#endif
+<BR>
+<BR>#endif
+</TT></UL>
+
+</OL>
+
+<H1>Notes about specific chapters (including localized bugs):</H1>
+
+<H2>Chapters 0-2</H2>
+
+The code in these chapters should compile without complaint.
+
+<H2>Chapter 3</H2>
+
+Programs in this chapter will require workarounds for the pervasive bugs
+described above.  In particular, the definition of <TT>vec_sz</TT>
+near the top of page 47 needs to be changed from
+
+<UL><TT>
+typedef vector&lt;double&gt;::size_type vec_sz;
+</TT></UL>
+
+to
+
+<UL><TT>
+typedef std::vector&lt;double&gt;::size_type vec_sz;
+</TT></UL>
+
+<H2>Chapters 4-5</H2>
+
+Programs in these chapters will require workarounds for the
+pervasive bugs described above.
+
+<H2>Chapter 6</H2>
+
+Programs in this chapter will require workarounds for the
+pervasive bugs described above.
+
+<P>In additon, although the program to find URLs should have
+<TT>using</TT> declarations for the character classification
+functions, <TT>isalpha</TT> and <TT>isalnum</TT>, VC++ 6.0 mistakenly
+says that these functions are not part of the <TT>std</TT> namespace.
+You can work around this bug by omitting the <TT>using</TT>
+declarations:
+
+<UL><TT>
+    #ifndef _MSC_VER
+<BR>using std::isalpha;
+<BR>using std::isalnum;
+<BR>#endif
+</TT></UL>
+
+<H2>Chapter 7</H2>
+
+Programs in this chapter will have to work around the first
+pervasive bug described above.
+
+<H2>Chapter 8</H2>
+
+<OL>
+<LI>Problem #1 from above applies also to generic uses of
+containers and requires a similar workaround.
+For example, in the generic median program, it should be legal to write:
+
+<UL><TT>
+<BR>using std::vector;
+<BR>typedef typename vector&lt;T&gt;::size_type vec_sz;
+</TT></UL></BR>
+
+But for VC++ 6.0, we must instead write:
+
+<UL><TT>
+<BR>typedef typename std::vector&lt;T&gt;::size_type vec_sz;
+</TT></UL></BR>
+
+<LI>In the <TT>split</TT> function, it is correct to include a
+<TT>using</TT> declaration for the <TT>std::isspace</TT> function, but
+as in Chapter 6 and the <TT>isalpha</TT> and <TT>isalnum</TT>
+functions, VC++ 6.0 incorrectly says that <TT>isspace</TT> is
+not in namespace <TT>std</TT>.  Use the same workaround--do not
+include a <TT>using</TT> declaration for <TT>isspace</TT>.
+
+</OL>
+
+<H2>Chapter 9</H2>
+
+Programs in this chapter will require workarounds for the
+pervasive bugs described above.
+
+<H2>Chapter 10</H2>
+
+The code in this chapters should compile without complaint.
+
+<H2>Chapter 11</H2>
+
+The <TT>allocate</TT> member of class <TT>std::allocator</TT> is defined to
+take a single argument of type <TT>size_t</TT>.  
+VC++ 6.0 incorrectly requires a second argument, which it uses as a hint
+to optimize the performance of <TT>allocate</TT>.  
+A null pointer can be passed as the second argument, 
+which has the effect of not offering a hint.  
+To work around the problem, rewrite each of the calls to <TT>allocate</TT> to pass this extra, 
+non-standard argument.
+ 
+<P>For example, we can rewrite the call to <TT>allocate</TT> in <TT>Vec::create</TT> as follows:
+
+<UL><TT>
+    #ifdef _MSC_VER
+<BR><UL>data = alloc.allocate(n, 0);</UL>
+    #else
+<BR><UL>data = alloc.allocate(n);</UL>
+    #endif
+</TT></UL>
+
+<H2>Chapter 12</H2>
+Similar to the problems in Chapters 6 and 8, where VC++ 6.0
+fails to include the character classification functions 
+(<TT>isalpha</TT>, <TT>isalnum</TT>, <TT>isspace</TT> etc.) 
+as part of the <TT>std</TT> namespace, it also fails to 
+include the <TT>strlen</TT> function in <TT>std</TT>.
+The workaround is analogous: Omit the qualification of <TT>std::strlen</TT>.  
+
+<P>For example, in the <TT>Str</TT> constructor that takes a <TT>const char*</TT>:
+
+<UL><TT>
+    #ifdef _MSC_VER
+<BR><UL>std::copy(cp, cp + strlen(cp), std::back_inserter(data));</UL>
+    #else
+<BR><UL>std::copy(cp, cp + std::strlen(cp), std::back_inserter(data));</UL>
+    #endif
+</TT></UL>
+
+<H2>Chapter 13</H2>
+
+Programs in this chapter will require workarounds for the
+pervasive bugs described above.
+
+<P>In addition, the return type for the <TT>clone</TT> function
+in class <TT>Grad</TT> must be changed to be a <TT>Core*</TT> rather than a <TT>Grad*</TT> as written in the book:
+
+<UL><TT>
+<BR>#ifdef _MSC_VER
+<BR><UL>Core* clone() const { return new Grad(*this); }</UL>
+    #else
+<BR><UL>Grad* clone() const { return new Grad(*this); }</UL>
+    #endif     
+</TT></UL>
+<BR>
+
+because VC++ 6.0 does not yet allow a virtual function returning a
+pointer (or reference) to a base class to be defined in a derived
+class to return a pointer (or reference) to the derived type.
+<BR>
+
+<H2>Chapter 14</H2>
+
+The programs that reimplement earlier programs using <TT>Handle</TT> or <TT>Ptr</TT>
+will have to be fixed as described in the related chapter.  
+For example, the student grading solution that uses a <TT>vector&lt; Handle&lt;Core&gt; &gt;</TT>
+will have to be corrected for the pervasive problems described above.  
+Similarly, the <TT>Str</TT> class that is reimplemented using a <TT>Ptr</TT>
+will need to be adjusted to account for the MS bug related to <TT>strlen</TT> described in Chapter 12.
+<BR>
+
+<H2>Chapter 15</H2>
+
+Various functions use the <TT>max</TT> algorithm from the library 
+and so, as described above, the calls to <TT>max</TT> will have to be 
+replaced by corresponding calls to your own version.  
+
+<P>For example, in <TT>VCat_Pic</TT>:
+
+<TT><UL>
+    class VCat_Pic: public Pic_base 
+<BR>{
+<BR><UL>//...</UL>
+<BR><UL>wd_sz width() const
+    {
+<BR><UL>return std::max(top->width(), bottom->width()); </UL>
+    }</UL>
+</TT></UL>
+
+could be rewritten as:
+
+<TT><UL>
+    class VCat_Pic: public Pic_base 
+<BR>{
+<BR><UL>//...</UL>
+<BR><UL>wd_sz width() const
+    {</UL>
+<BR>#ifndef _MSC_VER
+<UL>
+<BR><UL>return std::max(top->width(), bottom->width()); </UL>
+</UL>
+    #else
+<UL>
+<BR><UL>return max(top->width(), bottom->width()); </UL>
+    }</UL>
+</UL>
+</TT></UL>
+<BR>
+
+Of course, a declaration for your version of <TT>max</TT> 
+would also have to be included in the file in which this code resides.
+
+
+<H2>Chapter 16</H2>
+
+Programs in this chapter will require workarounds for the
+pervasive bugs described above.
+
+
+
+
+<BR>
+</OL>
+
+</BODY>
+
+</HTML>
